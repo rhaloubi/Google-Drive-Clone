@@ -14,8 +14,16 @@ jobs:
           sudo npm install -g npm
           npm install
 
+      - name: Copy .env.example files
+        shell: bash
+        run: find . -type f -name ".env.example" -exec sh -c 'cp "$1" "${1%.*}"' _ {} \;
+
       - name: Typecheck
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npm run typecheck
 
       - name: Lint
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npm run lint
